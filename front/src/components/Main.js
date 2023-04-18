@@ -1,14 +1,9 @@
-import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import FirstSection from "./Home/FirstSection";
-import Footer from "./Home/Footer";
-import SecondSection from "./Home/SecondSection";
-import { ThirdSection } from "./Home/ThirdSection";
-
-const MainContainer = styled.div`
-  height: auto;
-`;
+import styled from 'styled-components';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import Footer from './Home/Footer';
+import FirstSection from './Home/FirstSection';
+import SecondSection from './Home/SecondSection';
+import ThirdSection from './Home/ThirdSection';
 
 function Main() {
   return (
@@ -30,3 +25,7 @@ function Main() {
 }
 
 export default Main;
+
+const MainContainer = styled.div`
+  height: auto;
+`;

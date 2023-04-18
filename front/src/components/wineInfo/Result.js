@@ -1,10 +1,105 @@
-import { BackTop, Card, Image, Rate } from "antd";
-import BookmarkButton from "../bookmark/BookmarkButton";
-import styled from "styled-components";
-import { useEffect, useState } from "react";
-import ReviewForm from "../Review/ReviewForm";
-import WineChart from "./WineChart";
-import Rating from "../SearchWine/Rating";
+import { useEffect, useState } from 'react';
+
+import styled from 'styled-components';
+import { BackTop, Card, Image } from 'antd';
+import BookmarkButton from '../bookmark/BookmarkButton';
+import ReviewForm from '../Review/ReviewForm';
+import WineChart from './WineChart';
+import Rating from '../SearchWine/Rating';
+
+function Result({
+  wineId,
+  nation,
+  title,
+  type,
+  local,
+  price,
+  ImageURL,
+  abv,
+  varieties,
+  bookmarked,
+  sweet,
+  acidity,
+  body,
+  tannin,
+  bookmarkList,
+  setBookmarkList,
+}) {
+  const isResultPage = true;
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+  const [rating, setRatingVal] = useState(0);
+  const [ratingCnt, setRatingCnt] = useState(0);
+
+  useEffect(() => {
+    setIsBookmarked(bookmarked);
+  }, [bookmarked]);
+
+  return (
+    <>
+      <Container>
+        <WineChart
+          sweet={sweet}
+          acidity={acidity}
+          body={body}
+          tannin={tannin}
+        />
+        <StyledCard>
+          <BookmarkButton
+            isResultPage={isResultPage}
+            isBookmarked={isBookmarked}
+            setIsBookmarked={setIsBookmarked}
+            wineId={wineId}
+            bookmarkList={bookmarkList}
+            setBookmarkList={setBookmarkList}
+          />
+          <ContentWrapper>
+            <BottleImg>
+              <WineImg width={150} src={'https://' + ImageURL} />
+            </BottleImg>
+            <InfoColumn>
+              <WineInfo>
+                <WineInfoVintage>
+                  <WineTitle>{title}</WineTitle>
+                  <WineType>와인타입: {type}</WineType>
+                </WineInfoVintage>
+                <WineNation>
+                  {nation}, {local}
+                </WineNation>
+              </WineInfo>
+              <VarietyWrapper>
+                <VarietyInfo>품종 : {varieties}</VarietyInfo>
+              </VarietyWrapper>
+            </InfoColumn>
+            <RatingWrapper>
+              <Rating
+                wineId={wineId}
+                rating={rating}
+                ratingCnt={ratingCnt}
+                setRatingVal={setRatingVal}
+                setRatingCnt={setRatingCnt}
+              />
+              {price === 0 ? (
+                <RatingPrice>가격 정보가 없습니다</RatingPrice>
+              ) : (
+                <RatingPrice>가격: \{price}</RatingPrice>
+              )}
+            </RatingWrapper>
+          </ContentWrapper>
+        </StyledCard>
+      </Container>
+      <ReviewForm
+        wineId={wineId}
+        rating={rating}
+        ratingCnt={ratingCnt}
+        setRatingVal={setRatingVal}
+        setRatingCnt={setRatingCnt}
+      ></ReviewForm>
+      <BackTop />
+    </>
+  );
+}
+
+export default Result;
 
 const Container = styled.div`
   &:first-child {
@@ -55,35 +150,6 @@ const RatingWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   margin: auto;
-`;
-
-const RatingContents = styled.div`
-  padding-bottom: 15px;
-  flex-direction: column;
-  display: flex;
-  align-items: center;
-`;
-
-const RatingNum = styled.div`
-  font-size: 40px;
-  line-height: 48px;
-  font-weight: 400;
-  margin-right: 8px;
-`;
-
-const RatingDetail = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 100%;
-  padding-right: 8px;
-`;
-
-const ReviewNum = styled.div`
-  max-width: 100%;
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 400;
 `;
 
 const RatingPrice = styled.div`
@@ -159,99 +225,3 @@ const VarietyInfo = styled.div`
   font-weight: 400;
   line-height: 24px;
 `;
-
-function Result({
-  wineId,
-  nation,
-  title,
-  type,
-  local,
-  price,
-  ImageURL,
-  abv,
-  varieties,
-  bookmarked,
-  sweet,
-  acidity,
-  body,
-  tannin,
-  // rating,
-  // ratingCnt,
-  bookmarkList,
-  setBookmarkList,
-}) {
-  const isResultPage = true; // 북마크 분기점
-  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
-  const [rating, setRatingVal] = useState(0);
-  const [ratingCnt, setRatingCnt] = useState(0);
-
-  useEffect(() => {
-    setIsBookmarked(bookmarked);
-  }, [bookmarked]);
-
-  return (
-    <>
-      <Container>
-        <WineChart
-          sweet={sweet}
-          acidity={acidity}
-          body={body}
-          tannin={tannin}
-        />
-        <StyledCard>
-          <BookmarkButton
-            isResultPage={isResultPage}
-            isBookmarked={isBookmarked}
-            setIsBookmarked={setIsBookmarked}
-            wineId={wineId}
-            bookmarkList={bookmarkList}
-            setBookmarkList={setBookmarkList}
-          />
-          <ContentWrapper>
-            <BottleImg>
-              <WineImg width={150} src={"https://" + ImageURL} />
-            </BottleImg>
-            <InfoColumn>
-              <WineInfo>
-                <WineInfoVintage>
-                  <WineTitle>{title}</WineTitle>
-                  <WineType>와인타입: {type}</WineType>
-                </WineInfoVintage>
-                <WineNation>
-                  {nation}, {local}
-                </WineNation>
-              </WineInfo>
-              <VarietyWrapper>
-                <VarietyInfo>품종 : {varieties}</VarietyInfo>
-              </VarietyWrapper>
-            </InfoColumn>
-            <RatingWrapper>
-              <Rating
-                wineId={wineId}
-                rating={rating}
-                ratingCnt={ratingCnt}
-                setRatingVal={setRatingVal}
-                setRatingCnt={setRatingCnt}
-              />
-              {price === 0 ? (
-                <RatingPrice>가격 정보가 없습니다</RatingPrice>
-              ) : (
-                <RatingPrice>가격: \{price}</RatingPrice>
-              )}
-            </RatingWrapper>
-          </ContentWrapper>
-        </StyledCard>
-      </Container>
-      <ReviewForm
-        wineId={wineId}
-        rating={rating}
-        ratingCnt={ratingCnt}
-        setRatingVal={setRatingVal}
-        setRatingCnt={setRatingCnt}
-      ></ReviewForm>
-      <BackTop />
-    </>
-  );
-}
-
-export default Result;

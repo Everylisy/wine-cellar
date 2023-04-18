@@ -1,12 +1,39 @@
-import styled from "styled-components";
-import BackVideo from "../../assets/videoplayback.mp4";
+import styled from 'styled-components';
+import BackVideo from '../../assets/videoplayback.mp4';
+
+function FirstSection() {
+  return (
+    <>
+      <FirSection>
+        <IntroTextWrapper>
+          <IntroText>
+            와인이 필요한 <br />
+            모든 순간, <br />
+            <span>와인셀러</span>
+          </IntroText>
+          <IntroDesc>
+            간편 로그인부터 추천서비스까지, <br />
+            <span>와인셀러</span> 단 하나로 <span>와인</span>을 즐겨보세요.
+          </IntroDesc>
+        </IntroTextWrapper>
+        <VideoWrapper>
+          <BgVideo autoPlay={true} muted={true} loop={true}>
+            <source src={BackVideo} type="video/mp4" />
+          </BgVideo>
+        </VideoWrapper>
+      </FirSection>
+    </>
+  );
+}
+
+export default FirstSection;
 
 const FirSection = styled.section`
   height: 100vh;
   &::before {
     background-color: #000;
     bottom: 0;
-    content: "";
+    content: '';
     left: 0;
     opacity: 0.5;
     position: absolute;
@@ -63,30 +90,3 @@ const BgVideo = styled.video`
   object-fit: fill;
   width: 100%;
 `;
-
-function FirstSection() {
-  return (
-    <>
-      <FirSection>
-        <IntroTextWrapper>
-          <IntroText>
-            와인이 필요한 <br />
-            모든 순간, <br />
-            <span>와인셀러</span>
-          </IntroText>
-          <IntroDesc>
-            간편 로그인부터 추천서비스까지, <br />
-            <span>와인셀러</span> 단 하나로 <span>와인</span>을 즐겨보세요.
-          </IntroDesc>
-        </IntroTextWrapper>
-        <VideoWrapper>
-          <BgVideo autoPlay={true} muted={true} loop={true}>
-            <source src={BackVideo} type="video/mp4" />
-          </BgVideo>
-        </VideoWrapper>
-      </FirSection>
-    </>
-  );
-}
-
-export default FirstSection;

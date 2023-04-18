@@ -1,13 +1,113 @@
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { UserStateContext, DispatchContext } from "../App";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import LoginModal from "./User/Login/LoginModal";
-import "antd/dist/antd.min.css";
-import SearchWine from "./SearchWine/SearchWine";
-import Search from "antd/lib/transfer/search";
-import { message } from "antd";
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserStateContext, DispatchContext } from '../App';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import LoginModal from './User/Login/LoginModal';
+import 'antd/dist/antd.min.css';
+import Search from 'antd/lib/transfer/search';
+import { message } from 'antd';
+
+function Header() {
+  const navigate = useNavigate();
+  const userState = useContext(UserStateContext);
+  const dispatch = useContext(DispatchContext);
+
+  const [isModal, setIsModal] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+
+  const isLogin = !!userState.user;
+
+  const logout = () => {
+    sessionStorage.removeItem('userToken');
+    dispatch({ type: 'LOGOUT' });
+    navigate('/');
+  };
+
+  const communityForUser = () => {
+    message.warning({
+      content: '회원가입 후 이용할 수 있습니다.',
+      duration: 1.3,
+    });
+  };
+
+  const onClose = (e) => {
+    setIsModal(e);
+  };
+
+  const showModal = () => {
+    setIsModal(true);
+  };
+
+  const page = 1;
+  const perPage = 10;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (searchValue < 1) {
+      message.info('검색어를 한 글자 이상 입력해주세요.');
+    } else {
+      navigate(
+        `/search/wines?text=${searchValue}&page=${page}&perPage=${perPage}`
+      );
+    }
+  };
+
+  return (
+    <>
+      <Navbar>
+        <NavContainer>
+          <Logo>
+            <Link to={`/`}>
+              <img
+                alt=""
+                src={require('./team_5_logo.png')}
+                width="100px"
+                height="40px"
+              />
+            </Link>
+          </Logo>
+          <NavItems>
+            <form onSubmit={handleSubmit}>
+              <Search
+                placeholder="와인 검색하기"
+                allowClear
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                }}
+              />
+            </form>
+          </NavItems>
+          <NavItems>
+            <Link to={`/wine`}>와인 추천 받아보기🍷</Link>
+          </NavItems>
+          <NavItems>
+            {isLogin ? (
+              <NavItems>
+                <Link to={`/community/postList`}>커뮤니티💬</Link>
+              </NavItems>
+            ) : (
+              <NavItems onClick={communityForUser}>커뮤니티💬</NavItems>
+            )}
+          </NavItems>
+          <NavLogin>
+            {!isLogin ? (
+              <NavLoginItems onClick={showModal}>로그인</NavLoginItems>
+            ) : (
+              <>
+                <Link to={`/myPage`}>마이 페이지</Link>
+                <NavLoginItems onClick={logout}>로그아웃</NavLoginItems>
+              </>
+            )}
+            {isModal && <LoginModal isModal={isModal} onClose={onClose} />}
+          </NavLogin>
+        </NavContainer>
+      </Navbar>
+    </>
+  );
+}
+
+export default Header;
 
 const Navbar = styled.nav`
   width: 100%;
@@ -65,109 +165,3 @@ const NavLogin = styled.div`
   }
   cursor: pointer;
 `;
-
-function Header() {
-  const navigate = useNavigate();
-  // const location = useLocation();
-
-  const userState = useContext(UserStateContext);
-  const dispatch = useContext(DispatchContext);
-
-  // 전역상태에서 user가 null이 아니라면 로그인 성공 상태임.
-  const isLogin = !!userState.user;
-
-  // 로그아웃 클릭 시 실행되는 함수
-  const logout = () => {
-    // sessionStorage 에 저장했던 JWT 토큰을 삭제함.
-    sessionStorage.removeItem("userToken");
-    // dispatch 함수를 이용해 로그아웃함.
-    dispatch({ type: "LOGOUT" });
-    // 기본 페이지로 돌아감.
-    navigate("/");
-  };
-
-  const communityForUser = () => {
-    message.warning({
-      content: "회원가입 후 이용할 수 있습니다.",
-      duration: 1.3,
-    });
-  };
-
-  const [isModal, setIsModal] = useState(false);
-  const onClose = (e) => {
-    setIsModal(e);
-  };
-  const showModal = () => {
-    setIsModal(true);
-  };
-
-  const [searchValue, setSearchValue] = useState("");
-
-  const page = 1;
-  const perPage = 10;
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (searchValue < 1) {
-      message.info("검색어를 한 글자 이상 입력해주세요.");
-    } else {
-      navigate(
-        `/search/wines?text=${searchValue}&page=${page}&perPage=${perPage}`
-      );
-    }
-  };
-  return (
-    <>
-      <Navbar>
-        <NavContainer>
-          <Logo>
-            <Link to={`/`}>
-              <img
-                alt=""
-                src={require("./team_5_logo.png")}
-                width="100px"
-                height="40px"
-              />
-            </Link>
-          </Logo>
-          <NavItems>
-            <form onSubmit={handleSubmit}>
-              <Search
-                placeholder="와인 검색하기"
-                allowClear
-                onChange={(e) => {
-                  setSearchValue(e.target.value);
-                }}
-              />
-            </form>
-          </NavItems>
-          <NavItems>
-            <Link to={`/wine`}>와인 추천 받아보기🍷</Link>
-          </NavItems>
-          <NavItems>
-            {isLogin ? (
-              <NavItems>
-                <Link to={`/community/postList`}>커뮤니티💬</Link>
-              </NavItems>
-            ) : (
-              <NavItems onClick={communityForUser}>커뮤니티💬</NavItems>
-            )}
-          </NavItems>
-          <NavLogin>
-            {!isLogin ? (
-              <NavLoginItems onClick={showModal}>로그인</NavLoginItems>
-            ) : (
-              <>
-                <Link to={`/myPage`}>마이 페이지</Link>
-                <NavLoginItems onClick={logout}>로그아웃</NavLoginItems>
-              </>
-            )}
-            {isModal && <LoginModal isModal={isModal} onClose={onClose} />}
-          </NavLogin>
-        </NavContainer>
-      </Navbar>
-    </>
-  );
-}
-
-export default Header;

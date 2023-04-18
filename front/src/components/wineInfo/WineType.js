@@ -1,77 +1,29 @@
-import { Slider, Select, Checkbox, message } from "antd";
-import { useSetRecoilState } from "recoil";
-import styled from "styled-components";
-import { isCheckedAtom, nationAtom, priceAtom, typeAtom } from "../../atoms";
+import styled from 'styled-components';
+import { Slider, Select, Checkbox } from 'antd';
+import { useSetRecoilState } from 'recoil';
+import { isCheckedAtom, nationAtom, priceAtom, typeAtom } from '../../atoms';
 
 const { Option } = Select;
 
 const Nations = [
-  "프랑스 France",
-  "이탈리아 Italy",
-  "미국 U.S.A",
-  "칠레 Chile",
-  "스페인 Spain",
-  "호주 Australia",
-  "기타 국가 Others",
+  '프랑스 France',
+  '이탈리아 Italy',
+  '미국 U.S.A',
+  '칠레 Chile',
+  '스페인 Spain',
+  '호주 Australia',
+  '기타 국가 Others',
 ];
 
 const marks = {
-  100000: "10만원",
-  200000: "20만원",
-  300000: "30만원",
-  400000: "40만원",
-  500000: "50만원",
+  100000: '10만원',
+  200000: '20만원',
+  300000: '30만원',
+  400000: '40만원',
+  500000: '50만원',
 };
 
-const Types = ["Red", "White", "Rose", "Sparkling"];
-
-const TypeWrapper = styled.div`
-  display: flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-
-const InnerBox = styled.div`
-  width: 75%;
-  background: #f8f9fa;
-  border-radius: 15px;
-  height: 20vh;
-  margin-top: 40px;
-`;
-
-const SliderWrapper = styled.div`
-  position: absolute;
-  width: 75%;
-  padding-right: 7%;
-  padding-left: 7%;
-  margin-top: 40px;
-`;
-
-const PriceText = styled.span`
-  margin-right: 20px;
-`;
-
-const CheckboxWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 30px;
-`;
-
-const SelectWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-`;
-
-const NationWrapper = styled.div`
-  margin-right: 10px;
-`;
-
-const WineTypeWarpper = styled.div``;
+const Types = ['Red', 'White', 'Rose', 'Sparkling'];
 
 function WineType({ price, nation, type, isChecked }) {
   const setPrice = useSetRecoilState(priceAtom);
@@ -146,3 +98,51 @@ function WineType({ price, nation, type, isChecked }) {
 }
 
 export default WineType;
+
+const TypeWrapper = styled.div`
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const InnerBox = styled.div`
+  width: 75%;
+  background: #f8f9fa;
+  border-radius: 15px;
+  height: 20vh;
+  margin-top: 40px;
+`;
+
+const SliderWrapper = styled.div`
+  position: absolute;
+  width: 75%;
+  padding-right: 7%;
+  padding-left: 7%;
+  margin-top: 40px;
+`;
+
+const PriceText = styled.span`
+  margin-right: 20px;
+`;
+
+const CheckboxWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+`;
+
+const SelectWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const NationWrapper = styled.div`
+  margin-right: 10px;
+`;
+
+const WineTypeWarpper = styled.div``;

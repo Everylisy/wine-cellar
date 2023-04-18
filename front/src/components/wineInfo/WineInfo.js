@@ -1,113 +1,42 @@
-import { useEffect, useState, useContext } from "react";
-import * as Api from "../../api";
-import { Steps, Button } from "antd";
-import styled from "styled-components";
-import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { currentAtom, isLoadedAtom, resultAtom } from "../../atoms";
-import Result from "./Result";
-import StpesBtn from "./StepsAction";
-import { useNavigate } from "react-router-dom";
-import { UserStateContext } from "../../App";
+import { useEffect, useState, useContext } from 'react';
+import * as Api from '../../api';
+import { UserStateContext } from '../../App';
 
-const MainContainer = styled.div`
-  display: flex;
-  height: 100vh;
-  position: relative;
-  width: 100%;
-  padding: 0 48px;
-  max-width: calc(1200px + 48px + 48px);
-  margin: 0 auto;
-`;
-
-const BoxWrapper = styled.div`
-  display: flex;
-  width: 80%;
-  justify-content: center;
-  align-items: center;
-`;
-
-const StepWrapper = styled.div`
-  display: flex;
-  width: 20%;
-  justify-content: center;
-  align-items: center;
-`;
-
-const StepBox = styled.div`
-  /* display: flex; */
-  width: 900px;
-  height: 560px;
-  position: relative;
-  background: #ffffff;
-  border: 1px solid rgba(196, 196, 196, 0.5);
-  border-radius: 20px;
-`;
-
-const ResultWrapper = styled.div`
-  padding: 64px 0 64px 48px;
-  max-width: calc(1200px + 48px + 48px);
-  margin: 0 auto;
-`;
-
-const BgContainer = styled.div`
-  background-color: #f8f9fa;
-  ${ResultWrapper} {
-    width: 100%;
-    background-color: none;
-  }
-`;
+import styled from 'styled-components';
+import { Steps, Button } from 'antd';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentAtom, isLoadedAtom, resultAtom } from '../../atoms';
+import Result from './Result';
+import StpesBtn from './StepsAction';
 
 const { Step } = Steps;
 
-const StyledStep = styled(Steps)`
-  display: flex;
-  .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
-    background: #c365fd;
-  }
-  .ant-steps-item-finish .ant-steps-item-icon {
-    background-color: #fff;
-    border-color: #c365fd;
-  }
-  .ant-steps-item-process .ant-steps-item-icon {
-    background-color: #fff;
-    border-color: #c365fd;
-  }
-  .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
-    color: #c365fd;
-  }
-  .ant-steps-item-finish
-    > .ant-steps-item-container
-    > .ant-steps-item-tail::after {
-    background-color: #c365fd;
-  }
-`;
+const steps = [
+  {
+    title: '인트로',
+    description: '인트로 페이지입니다.',
+  },
+  {
+    title: '와인 종류 선택하기',
+    description: '어떤 종류의 와인을 추천해드릴까요?',
+  },
+  {
+    title: '맛 선택하기',
+    description: '어떤 맛을 선호하시나요?',
+  },
+];
 
 function WineInfo() {
   const userState = useContext(UserStateContext);
-  const navigate = useNavigate();
   const current = useRecoilValue(currentAtom);
-  const [isLoaded, setIsLoaded] = useRecoilState(isLoadedAtom);
   const result = useRecoilValue(resultAtom);
+  const [isLoaded, setIsLoaded] = useRecoilState(isLoadedAtom);
   const [bookmarkList, setBookmarkList] = useState([]);
-  const steps = [
-    {
-      title: "인트로",
-      description: "인트로 페이지입니다.",
-    },
-    {
-      title: "와인 종류 선택하기",
-      description: "어떤 종류의 와인을 추천해드릴까요?",
-    },
-    {
-      title: "맛 선택하기",
-      description: "어떤 맛을 선호하시나요?",
-    },
-  ];
 
   useEffect(() => {
     if (userState.user !== null) {
-      Api.get("bookmarklist").then((res) => {
+      Api.get('bookmarklist').then((res) => {
         const data = res.data.bookmark;
         setBookmarkList(data);
       });
@@ -150,7 +79,7 @@ function WineInfo() {
           <ResultWrapper key={result.id} title={result.name}>
             <Button
               onClick={() => window.location.reload()}
-              style={{ margin: "20px 0 20px 0 " }}
+              style={{ margin: '20px 0 20px 0 ' }}
             >
               돌아가기
             </Button>
@@ -207,3 +136,73 @@ function WineInfo() {
 }
 
 export default WineInfo;
+
+const MainContainer = styled.div`
+  display: flex;
+  height: 100vh;
+  position: relative;
+  width: 100%;
+  padding: 0 48px;
+  max-width: calc(1200px + 48px + 48px);
+  margin: 0 auto;
+`;
+
+const BoxWrapper = styled.div`
+  display: flex;
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StepWrapper = styled.div`
+  display: flex;
+  width: 20%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StepBox = styled.div`
+  width: 900px;
+  height: 560px;
+  position: relative;
+  background: #ffffff;
+  border: 1px solid rgba(196, 196, 196, 0.5);
+  border-radius: 20px;
+`;
+
+const ResultWrapper = styled.div`
+  padding: 64px 0 64px 48px;
+  max-width: calc(1200px + 48px + 48px);
+  margin: 0 auto;
+`;
+
+const BgContainer = styled.div`
+  background-color: #f8f9fa;
+  ${ResultWrapper} {
+    width: 100%;
+    background-color: none;
+  }
+`;
+
+const StyledStep = styled(Steps)`
+  display: flex;
+  .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
+    background: #c365fd;
+  }
+  .ant-steps-item-finish .ant-steps-item-icon {
+    background-color: #fff;
+    border-color: #c365fd;
+  }
+  .ant-steps-item-process .ant-steps-item-icon {
+    background-color: #fff;
+    border-color: #c365fd;
+  }
+  .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+    color: #c365fd;
+  }
+  .ant-steps-item-finish
+    > .ant-steps-item-container
+    > .ant-steps-item-tail::after {
+    background-color: #c365fd;
+  }
+`;
