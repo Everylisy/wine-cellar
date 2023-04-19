@@ -5,22 +5,20 @@ import styled from 'styled-components';
 
 const ReviewCard = ({ title, content, createdAt, rating }) => {
   return (
-    <>
-      <Comment
-        author={<StyledTitle>{title}</StyledTitle>}
-        avatar={
-          <Tag icon={<StarOutlined />} color="gold">
-            {rating}
-          </Tag>
-        }
-        content={<p>{content}</p>}
-        datetime={
-          <Tooltip title={moment(createdAt).format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment(createdAt).fromNow()}</span>
-          </Tooltip>
-        }
-      />
-    </>
+    <Comment
+      author={<StyledTitle>{title}</StyledTitle>}
+      avatar={
+        <Tag icon={<StarOutlined />} color="gold">
+          {rating}
+        </Tag>
+      }
+      content={content}
+      datetime={
+        <Tooltip title={moment(createdAt).format('YYYY-MM-DD HH:mm:ss')}>
+          {moment(createdAt).fromNow()}
+        </Tooltip>
+      }
+    />
   );
 };
 

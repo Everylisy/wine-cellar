@@ -9,7 +9,7 @@ import ReviewCard from './ReviewCard';
 
 const { Panel } = Collapse;
 
-function ReviewForm({ wineId, setRatingVal, setRatingCnt }) {
+function ReviewForm({ wineId }) {
   const [accordion, setAccordion] = useState(false);
   const [review, setReview] = useState([]);
 
@@ -30,12 +30,7 @@ function ReviewForm({ wineId, setRatingVal, setRatingCnt }) {
     <StyledCollapse onChange={handleReview}>
       <Panel header="⭐리뷰 보기 / 작성⭐" key="1" style={{ border: '0' }}>
         {isLogin ? (
-          <WineReview
-            wineId={wineId}
-            setReview={setReview}
-            setRatingVal={setRatingVal}
-            setRatingCnt={setRatingCnt}
-          />
+          <WineReview wineId={wineId} setReview={setReview} />
         ) : (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             로그인한 유저만 볼 수 있어요.
@@ -46,15 +41,13 @@ function ReviewForm({ wineId, setRatingVal, setRatingCnt }) {
           itemLayout="horizontal"
           dataSource={review}
           renderItem={(item) => (
-            <>
-              <ReviewCard
-                key={item.id}
-                title={item.title}
-                content={item.content}
-                createdAt={item.createdAt}
-                rating={item.rating}
-              ></ReviewCard>
-            </>
+            <ReviewCard
+              key={item.id}
+              title={item.title}
+              content={item.content}
+              createdAt={item.createdAt}
+              rating={item.rating}
+            ></ReviewCard>
           )}
         />
       </Panel>
