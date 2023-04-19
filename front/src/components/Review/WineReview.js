@@ -5,46 +5,52 @@ import styled from 'styled-components';
 import { Button, Input, Rate, message } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 
-const desc = ['1점', '2점', '3점', '4점', '5점'];
+const REVIEW_SCORE_DESC = ['1점', '2점', '3점', '4점', '5점'];
+const REVIEW_ERROR_MESSAGE = '폼을 모두 작성해주세요.';
 
-function WineReview({ wineId, setReview, setRatingVal, setRatingCnt }) {
+function WineReview({ wineId, setReview }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(0);
   const [writing, setWriting] = useState(true);
 
+  const reviewFormIsValid = (value) => {
+    return value.toString().trim().length > 0;
+  };
+
+  const titleIsValid = reviewFormIsValid(title);
+  const contentIsValid = reviewFormIsValid(content);
+  const ratingIsValid = reviewFormIsValid(rating);
+
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-    if (!rating && !title && !content) {
-      message.error('폼을 모두 작성해주세요.');
-    } else if (!rating) {
-      message.error('레이팅을 작성해주세요.');
-    } else if (!title && !content) {
-      message.error('제목을 작성해주세요.');
-    } else if (!content) {
-      message.error('내용을 작성해주세요.');
-    } else {
-      await Api.post(`reviews/${wineId}`, {
-        title,
-        content,
-        rating,
-      });
 
-      const res = await Api.get(`reviews/wines/${wineId}`);
-      const SearchRes = await Api.get(`reviews/rating/${wineId}`);
-      if (!res && !SearchRes) {
-        message.loading('등록 중...');
-      } else {
-        message.success('리뷰가 등록되었습니다.');
+    try {
+      if (titleIsValid && contentIsValid && ratingIsValid) {
+        const res = await Api.post(`reviews/${wineId}`, {
+          title,
+          content,
+          rating,
+        });
+
+        if (!res.ok) {
+          throw new Error('HTTP Error');
+        }
+
         setReview(res.data.reviews);
-        setRatingVal(SearchRes.data.rating);
-        setRatingCnt(SearchRes.data.ratingCnt);
+        setWriting(false);
+        setTitle('');
+        setContent('');
+        setRating(0);
+      } else {
+        message.error(REVIEW_ERROR_MESSAGE);
       }
-
-      setWriting(false);
-      setTitle('');
-      setContent('');
-      setRating(0);
+    } catch (error) {
+      console.error(
+        'Fetch Error:',
+        error instanceof Error ? error.message : error
+      );
+      throw error;
     }
   };
 
@@ -62,9 +68,15 @@ function WineReview({ wineId, setReview, setRatingVal, setRatingCnt }) {
         <FormWrapper>
           <span>
             <StarLabel>리뷰 남기기 </StarLabel>
-            <Rate tooltips={desc} onChange={handleChange} value={rating} />
+            <Rate
+              tooltips={REVIEW_SCORE_DESC}
+              onChange={handleChange}
+              value={rating}
+            />
             {rating ? (
-              <span className="ant-rate-text">{desc[rating - 1]}</span>
+              <span className="ant-rate-text">
+                {REVIEW_SCORE_DESC[rating - 1]}
+              </span>
             ) : null}
           </span>
 
